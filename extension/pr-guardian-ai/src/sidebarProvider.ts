@@ -1,3 +1,4 @@
+
 import * as vscode from "vscode";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
@@ -377,6 +378,67 @@ body {
   font-size: 10px;
   font-weight: 700;
 }
+  /* ================= IBM Bob Chat ================= */
+
+.chat-box {
+  max-height: 240px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.chat-user {
+  align-self: flex-end;
+  background: #2563eb;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 12px 12px 2px 12px;
+  font-size: 12px;
+  max-width: 85%;
+}
+
+.chat-bob {
+  align-self: flex-start;
+  background: #161b22;
+  border: 1px solid #22d3ee;
+  color: #d1d5db;
+  padding: 10px 12px;
+  border-radius: 12px 12px 12px 2px;
+  font-size: 12px;
+  white-space: pre-wrap;
+  max-width: 90%;
+}
+
+.chat-input {
+  width: 100%;
+  background: #0d1117;
+  color: white;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  resize: none;
+  font-family: inherit;
+}
+
+.chat-btn {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #0891b2, #2563eb);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.chat-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* =============================================== */
 
 /* SECURITY ISSUES */
 
@@ -492,78 +554,6 @@ body {
 </head>
 
 <body>
-  <meta charset="UTF-8" />
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 16px;
-      color: var(--vscode-foreground);
-      background: var(--vscode-sideBar-background);
-    }
-
-    h2 {
-      color: #0F62FE;
-      margin-bottom: 20px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #0F62FE;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 16px;
-    }
-
-    button:hover {
-      background: #0353e9;
-    }
-
-    #result {
-      margin-top: 12px;
-      line-height: 1.6;
-    }
-
-    .score {
-      font-size: 18px;
-      font-weight: bold;
-      color: #0F62FE;
-    }
-
-    .good {
-      color: #24A148;
-      font-weight: bold;
-    }
-
-    .bad {
-      color: #DA1E28;
-      font-weight: bold;
-    }
-
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      background: #1E1E1E;
-      color: #98FB98;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      overflow-x: auto;
-      margin-top: 8px;
-    }
-
-    hr {
-      margin: 16px 0;
-    }
-  </style>
-</head>
-
-<body>
-
-  <h2>🛡️ PR Guardian AI</h2>
 
 <div class="header">
 
@@ -572,7 +562,6 @@ body {
     PR Guardian AI
   </div>
 
-<<<<<<< HEAD
   <div class="subtitle">
     AI-powered Pull Request Security Review
   </div>
@@ -582,37 +571,11 @@ body {
 <button id="reviewBtn" class="review-btn">
   🔍 Review Current PR
 </button>
-=======
-  <script>
-
-    const button = document.getElementById("reviewBtn");
-    const result = document.getElementById("result");
-
-    button.addEventListener("click", async () => {
-
-      result.innerHTML = "⏳ Reviewing Pull Request with IBM Bob...";
-
-      try {
-
-        const response = await fetch("http://127.0.0.1:8000/review", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            pr_title: "VS Code PR",
-            pr_description: "Triggered from VS Code Extension",
-            changed_files: ["auth.py"],
-            diff: "diff --git a/auth.py b/auth.py\\n+password=user_input\\n+api_key='SECRET'"
-          })
-        });
->>>>>>> fa06333 (Person A complete: IBM Bob integration and VS Code extension)
 
 <div id="lastReviewed" class="last-reviewed hidden">
   ● Last reviewed: just now
 </div>
 
-<<<<<<< HEAD
 <div id="result">
 
   <div class="card">
@@ -640,6 +603,8 @@ const button = document.getElementById("reviewBtn");
 const result = document.getElementById("result");
 const lastReviewed = document.getElementById("lastReviewed");
 
+
+let latestReviewContext = "";
 
 /*
  * ---------------------------------------------------------
@@ -699,12 +664,21 @@ button.addEventListener("click", async () => {
       );
     }
 
+    
     const data = await response.json();
+    latestReviewContext = \`
+    Review Score: \${data.review_score}
 
-    console.log(
-      "PR Guardian Response:",
-      data
-    );
+    Recommendation:
+    \${data.recommendation}
+
+    IBM Bob Review:
+    \${data.ai_review}
+    \`;
+
+    console.log("PR Guardian Response:", data);
+
+    
 
     // Your existing dashboard code continues here...
 
@@ -1081,9 +1055,8 @@ button.addEventListener("click", async () => {
             🤖 IBM Bob Analysis
           </div>
 
-          <div class="ai-text">
-            \${data.recommendation ||
-              "Review completed successfully."}
+          <div class="ai-text" style="white-space: pre-wrap;">
+            \${data.ai_review || data.recommendation || "Review completed successfully."}
           </div>
 
           <div class="bob">
@@ -1093,6 +1066,28 @@ button.addEventListener("click", async () => {
         </div>
 
       </div>
+      <!-- ================= IBM Bob Chat Assistant ================= -->
+        <div class="card">
+          <div class="card-title cyan">💬 Ask IBM Bob</div>
+
+          <div id="chatMessages" class="chat-box">
+            <div class="chat-bob">
+              👋 Hi! I'm IBM Bob. Ask me anything about this pull request.
+            </div>
+          </div>
+
+          <textarea
+            id="chatInput"
+            class="chat-input"
+            rows="2"
+            placeholder="Ask IBM Bob about this PR..."
+          ></textarea>
+
+          <button id="sendChatBtn" class="chat-btn">
+            🤖 Ask IBM Bob
+          </button>
+        </div>
+        <!-- ============================================== -->
 
 
       <!-- 5. CHANGED CODE -->
@@ -1174,6 +1169,7 @@ button.addEventListener("click", async () => {
       </div>
 
     \`;
+    initialiseChat();
 
 
     /*
@@ -1247,59 +1243,67 @@ button.addEventListener("click", async () => {
   }
 
 });
+function initialiseChat() {
+
+  const chatMessages = document.getElementById("chatMessages");
+  const chatInput = document.getElementById("chatInput");
+  const chatBtn = document.getElementById("sendChatBtn");
+
+  if (!chatMessages || !chatInput || !chatBtn) return;
+
+  chatBtn.onclick = async function () {
+
+    const question = chatInput.value.trim();
+    if (!question) return;
+
+    chatMessages.innerHTML +=
+      '<div class="chat-user">' + question + '</div>';
+
+    chatInput.value = "";
+
+    chatMessages.innerHTML +=
+      '<div class="chat-bob" id="thinking">🤖 IBM Bob is thinking...</div>';
+
+    try {
+
+      const response = await fetch("http://127.0.0.1:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: question,
+          context: latestReviewContext
+        })
+      });
+
+      const data = await response.json();
+
+      const thinking = document.getElementById("thinking");
+      if (thinking) thinking.remove();
+
+      chatMessages.innerHTML +=
+        '<div class="chat-bob">' + data.answer + '</div>';
+
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    } catch {
+
+      const thinking = document.getElementById("thinking");
+      if (thinking) thinking.remove();
+
+      chatMessages.innerHTML +=
+        '<div class="chat-bob">❌ Could not connect to IBM Bob.</div>';
+    }
+  };
+}
+
+
 
 </script>
-=======
-        const data = await response.json();
-
-        console.log("Backend Response:", data);
-
-        result.innerHTML = \`
-          <div>
-
-            <div class="score">📊 Score: \${data.review_score}/100</div>
-
-            <p><b>Merge Ready:</b>
-              <span class="\${data.merge_ready ? "good" : "bad"}">
-                \${data.merge_ready ? "✅ Yes" : "❌ No"}
-              </span>
-            </p>
-
-            <p><b>Recommendation:</b><br>
-              \${data.recommendation}
-            </p>
-
-            <hr>
-
-            <h3>🤖 IBM Bob Security Review</h3>
-
-            <pre>\${data.ai_review}</pre>
-
-          </div>
-        \`;
-
-      } catch (err) {
-
-        console.error(err);
-
-        result.innerHTML = \`
-          <p style="color:red;">
-            ❌ Cannot connect to FastAPI backend.
-          </p>
-          <p>
-            Make sure <b>uvicorn app:app --reload</b> is running in the backend terminal.
-          </p>
-        \`;
-
-      }
-
-    });
-
-  </script>
->>>>>>> fa06333 (Person A complete: IBM Bob integration and VS Code extension)
 
 </body>
 </html>
 `;
   }
 }
+
+
