@@ -1,10 +1,10 @@
 {
   "name": "pr-guardian-ai",
-  "displayName": "pr-guardian-ai",
+  "displayName": "PR Guardian AI",
   "description": "AI PR Reviewer using IBM Bob",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.134.0"
+    "vscode": "^1.102.0"
   },
   "categories": [
     "Other"

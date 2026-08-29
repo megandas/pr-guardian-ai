@@ -38,7 +38,7 @@ exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 const sidebarProvider_1 = require("./sidebarProvider");
 function activate(context) {
-    console.log("PR Guardian AI activated");
+    console.log("PR Guardian AI Activated!");
     const provider = new sidebarProvider_1.SidebarProvider(context.extensionUri);
     context.subscriptions.push(vscode.window.registerWebviewViewProvider("prguardianView", provider));
 }
